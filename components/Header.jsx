@@ -1,20 +1,32 @@
-import React, { useState } from "react";
-import {AppBar, Box, Container, Divider, Hidden, IconButton, Link, List, ListItem, SwipeableDrawer, Toolbar} from "@mui/material";
+import React, {useState} from "react";
+import {
+    AppBar,
+    Box,
+    Container,
+    Divider,
+    Hidden,
+    IconButton,
+    Link,
+    List,
+    ListItem,
+    SwipeableDrawer,
+    Toolbar
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 
 const navigationLinks = [
-    { name: "Home", href: "/" },
-    { name: "Add Book", href: "/books/add" },
-    { name: "Facebook", href: "https://www.facebook.com/dmmarkin/" },
+    {name: "Home", href: "/"},
+    {name: "Add Book", href: "/books/add"},
+    {name: "Facebook", href: "https://www.facebook.com/dmmarkin/"},
 ];
 
 const Header = () => {
     const [open, setOpen] = useState(false);
     return (
         <AppBar position="sticky" color="default">
-            <Container maxWidth="md">
+            <Container>
                 <Toolbar disableGutters>
                     <Box style={{
                         display: 'flex',
@@ -22,10 +34,16 @@ const Header = () => {
                         flexWrap: 'wrap',
                         margin: 'auto'
                     }}>
-                        <NewspaperIcon />
-                        <h3>World Chess Periodics</h3>
+                        <NewspaperIcon/>
+                        <h4>World Chess Periodics</h4>
                     </Box>
-                    <Hidden xsDown>
+
+                    <Box style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        margin: 'auto'
+                    }}><Hidden xsDown>
                         {navigationLinks.map((item) => (
                             <Link
                                 style={{marginRight: 20}}
@@ -39,9 +57,10 @@ const Header = () => {
                             </Link>
                         ))}
                     </Hidden>
+                    </Box>
                     <Hidden smUp>
                         <IconButton onClick={() => setOpen(true)}>
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                     </Hidden>
                 </Toolbar>
@@ -59,25 +78,26 @@ const Header = () => {
                     tabIndex={0}
                 >
                     <IconButton>
-                        <ChevronRightIcon />
+                        <ChevronRightIcon/>
                     </IconButton>
                 </div>
-                <Divider />
-                <List>
-                    {navigationLinks.map((item) => (
-                        <ListItem key={item.name}>
-                            <Link
-                                style={{marginRight: 20}}
-                                color="textPrimary"
-                                variant="button"
-                                underline="none"
-                                href={item.href}
-                            >
-                                {item.name}
-                            </Link>
-                        </ListItem>
-                    ))}
-                </List>
+                <Divider/>
+
+                    <List>
+                        {navigationLinks.map((item) => (
+                            <ListItem key={item.name}>
+                                <Link
+                                    style={{marginRight: 20}}
+                                    color="textPrimary"
+                                    variant="button"
+                                    underline="none"
+                                    href={item.href}
+                                >
+                                    {item.name}
+                                </Link>
+                            </ListItem>
+                        ))}
+                    </List>
             </SwipeableDrawer>
         </AppBar>
     );

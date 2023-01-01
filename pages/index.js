@@ -9,9 +9,9 @@ const Home = ({books}) => {
     return (
         <div className={styles.container}>
             <main className={styles.main}>
-                <h1 className={styles.title}>
+                <h3 className={styles.title}>
                     Chess Library
-                </h1>
+                </h3>
                 <BooksTable rows={books}/>
             </main>
 
@@ -28,7 +28,7 @@ export const getStaticProps = async () => {
     const books = await getAllBooks();
     return {
         props: {
-            books: books.toString()
+            books: books
         }
     }
 };

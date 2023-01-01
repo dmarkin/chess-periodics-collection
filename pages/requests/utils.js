@@ -7,7 +7,7 @@ export const getAll = async () => {
     }
 
     console.log('Utils getAll', res.data);
-    const data = await res.data;
+    const data = await res.data?.books;
     return data;
 };
 

@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+import {Box, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,7 +22,7 @@ function getStyles(name, personName, theme) {
     };
 }
 
-export default function MultiSelect({list = [], value = [], required, name, id, label, labelId, onChange}) {
+const MultiSelect = ({list, value, required, name, id, label, labelId, onChange}) => {
     const theme = useTheme();
     const [personName, setPersonName] = React.useState([]);
 
@@ -78,4 +72,11 @@ export default function MultiSelect({list = [], value = [], required, name, id, 
             </FormControl>
         </div>
     );
-}
+};
+
+MultiSelect.defaultProps = {
+    list: [],
+    value: []
+};
+
+export default MultiSelect;

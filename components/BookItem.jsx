@@ -219,6 +219,7 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
                         list={sourcesList || []}
                         value={book.sources || []}
                         label="Book Sources"
+                        multiline
                     />
                 </Box>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>

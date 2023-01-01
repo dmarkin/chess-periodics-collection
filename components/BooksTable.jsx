@@ -5,7 +5,6 @@ import {
     Box,
     Paper,
     Snackbar,
-    Switch,
     Table,
     TableBody,
     TableCell,
@@ -152,7 +151,6 @@ const EnhancedTable = ({rows = []}) => {
     };
 
     const handleRemove = (id) => {
-
         removeBook(id)
             .then((data) => console.log(data))
             .then(() => setIsNotificationOpened(true))

@@ -17,7 +17,7 @@ export const getAll = async (req, res) => {
 
     return res
         .status(200)
-        .json({books, revalidate: 30})
+        .json({books})
 };
 
 export const get = async (req, res) => {

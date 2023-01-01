@@ -11,10 +11,10 @@ const bookSchema = new Schema({
         type: String,
         required: true
     },
-    // previousNames: {
-    //     type: String,
-    //     required: false
-    // },
+    previousNames: {
+        type: String,
+        required: false
+    },
     author: {
         type: String,
         required: false
@@ -23,14 +23,22 @@ const bookSchema = new Schema({
         type: String,
         required: false
     },
+    notPrecisedStartDate: {
+        type: Boolean,
+        required: false
+    },
     endDate: {
         type: String,
         required: false
     },
-    // imageUrl: {
-    //     type: String,
-    //     required: false
-    // },
+    notPrecisedEndDate: {
+        type: Boolean,
+        required: false
+    },
+    imageUrl: {
+        type: String,
+        required: false
+    },
     countries: {
         type: [String],
         required: true
