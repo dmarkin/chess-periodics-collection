@@ -1,13 +1,12 @@
 import {useEffect, useState} from 'react';
-import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from '@mui/material';
+import {Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import MultiSelect from './Multiselect';
 import {isoLangs} from "../constants/languages";
 import {isoCountries} from "../constants/countries";
 import {sources} from "../constants/sources";
 import {publishingTypes} from "../constants/types";
+import styles from "../styles/Home.module.css";
 
 export const createLanguagesList = () => {
     const langs = [];
@@ -41,7 +40,9 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
         title: '',
         author: '',
         startDate: null,
+        notPrecisedStartDate: false,
         endDate: null,
+        notPrecisedEndDate: false,
         imageUrl: '',
         countries: [],
         language: '',
@@ -50,16 +51,38 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
     };
     const initialForm = isNew ? initialRecord : {...initialValue};
     const [book, setBook] = useState(initialForm);
+    const [notPrecisedStartDateChecked, setNotPrecisedStartDateChecked] = useState(book.notPrecisedStartDate || false);
+    const [notPrecisedEndDateChecked, setNotPrecisedEndDateChecked] = useState(book.notPrecisedEndDate || false);
 
     useEffect(() => {
-        console.log('useEffect call', book);
         setBook({...initialValue});
+        setNotPrecisedStartDateChecked(initialValue?.notPrecisedStartDate || false);
+        setNotPrecisedEndDateChecked(initialValue?.notPrecisedEndDate || false);
     }, [isNew, initialValue]);
 
     const handleChange = (e) => {
+        console.log('Set Field Name ', e.target.name, ' to Value ', e.target.value);
         setBook((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value
+        }));
+    };
+
+    const handleCheckboxChange = (e) => {
+        console.log('Set Field Name ', e.target.name, ' to Value ', e.target.checked);
+        switch (e.target.name) {
+            case 'notPrecisedStartDate':
+                setNotPrecisedStartDateChecked(e.target.checked);
+                break;
+            case 'notPrecisedEndDate':
+                setNotPrecisedEndDateChecked(e.target.checked);
+                break;
+            default:
+                break;
+        }
+        setBook((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.checked
         }));
     };
 
@@ -84,9 +107,11 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
     };
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+
             <form style={{width: '50%', margin: '30px auto 0'}} onSubmit={handleSave}>
-                <Typography variant={'h4'} textAlign='center'>{isNew ? 'Add Book' : 'Edit Book'}</Typography>
+                <h2 className={styles.title}>
+                    {isNew ? 'Add Book' : 'Edit Book'}
+                </h2>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
                     <FormControl sx={{minWidth: '100%'}}>
                         <InputLabel id="type-label">Type</InputLabel>
@@ -140,33 +165,49 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
                 </Box>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
                     <DatePicker
+                        views={['day', 'month', 'year']}
                         name="startDate"
                         onChange={handleStartDateChange}
                         value={book.startDate || null}
-                        inputFormat="MM/DD/YYYY"
+                        inputFormat="DD/MM/YYYY"
+                        format="DD/MM/YYYY"
                         label="Start date"
                         renderInput={(params) => <TextField {...params} />}
                     />
+                    <FormControlLabel control={<Checkbox name="notPrecisedStartDate"
+                                                            checked={notPrecisedStartDateChecked}
+                                                            value={notPrecisedStartDateChecked}
+                                                            onChange={handleCheckboxChange}
+                                                            inputProps={{ 'aria-label': 'controlled' }} />}
+                                         label="Not presized" />
                 </Box>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
                     <DatePicker
+                        views={['day', 'month', 'year']}
                         name="endDate"
                         onChange={handleEndDateChange}
                         value={book.endDate || null}
-                        inputFormat="MM/DD/YYYY"
+                        inputFormat="DD/MM/YYYY"
+                        format="DD/MM/YYYY"
                         label="End date"
                         renderInput={(params) => <TextField {...params} />}
                     />
+                    <FormControlLabel control={<Checkbox name="notPrecisedEndDate"
+                                                         checked={notPrecisedEndDateChecked}
+                                                         value={notPrecisedEndDateChecked}
+                                                         onChange={handleCheckboxChange}
+                                                         inputProps={{ 'aria-label': 'controlled' }} />}
+                                      label="Not presized" />
                 </Box>
-                <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
-                    <TextField
-                        id="book-imageUrl"
-                        name="imageUrl"
-                        onChange={handleChange}
-                        value={book.imageURL || ''}
-                        label="Book Image URL"
-                    />
-                </Box>
+                {/*<Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>*/}
+                {/*    <TextField*/}
+                {/*        id="book-imageUrl"*/}
+                {/*        name="imageUrl"*/}
+                {/*        onChange={handleChange}*/}
+                {/*        value={book.imageURL || ''}*/}
+                {/*        label="Book Image URL"*/}
+                {/*    />*/}
+                {/*</Box>*/}
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
                     <MultiSelect
                         required
@@ -219,7 +260,6 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
                         list={sourcesList || []}
                         value={book.sources || []}
                         label="Book Sources"
-                        multiline
                     />
                 </Box>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
@@ -229,13 +269,13 @@ const BookItem = ({initialValue, isNew, onSubmit}) => {
                         onChange={handleChange}
                         value={book.availability || ''}
                         label="Book availability"
+                        multiline
                     />
                 </Box>
                 <Box sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
                     <Button type="submit" variant="contained">Save</Button>
                 </Box>
             </form>
-        </LocalizationProvider>
     )
 };
 

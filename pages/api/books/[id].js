@@ -3,6 +3,7 @@ import {get as getBook, remove as removeBook, update as updateBook} from "../../
 
 export default async (req, res) => {
     await connectToDB();
+    console.log('API Method: ', req.method);
 
     if (req.method === 'GET') {
         return getBook(req, res);

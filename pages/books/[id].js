@@ -17,7 +17,7 @@ const Edit = () => {
     const update = (data) => {
         console.log('Update book: ', data);
         updateBook(data)
-            .then((data) => console.log(data))
+            .then((data) => console.log('Book updated', data))
             .then(() => router.push('/'))
             .catch((error => console.log(error)));
     };

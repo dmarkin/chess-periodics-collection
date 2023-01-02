@@ -8,7 +8,7 @@ const Add = () => {
     const add = (data) => {
         console.log('Add book: ', data);
         return createBook(data)
-            .then((data) => console.log(data))
+            .then((data) => console.log('Book created', data))
             .then(() => router.push('/'))
             .catch((error => console.log(error)));
     };

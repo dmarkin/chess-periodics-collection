@@ -50,13 +50,10 @@ export const add = async (req, res) => {
 
     let book;
     try {
-        console.log('Controller book: ', book);
         book = new Book({...req.body});
-        console.log('Controller book: ', book);
         book = await book.save();
         console.log('Saved book: ', book);
     } catch (e) {
-        console.log('Error during saving: ', e);
         return new Error(e);
     }
 

@@ -17,7 +17,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import {visuallyHidden} from '@mui/utils';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 import {remove as removeBook} from '../pages/requests/utils';
+import styles from '../styles/BookTable.module.css';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -202,8 +204,14 @@ const EnhancedTable = ({rows = []}) => {
                                                 <Link href={`/books/${row._id}`}>{row.title}</Link>
                                             </TableCell>
                                             <TableCell align="right">{row.author}</TableCell>
-                                            <TableCell align="right">{row.startDate}</TableCell>
-                                            <TableCell align="right">{row.endDate}</TableCell>
+                                            <TableCell align="right"
+                                                       className={row.notPrecisedStartDate ? styles.greyFont : ''}>
+                                                {row.startDate ? dayjs(row.startDate).format('DD/MM/YYYY') : ''}
+                                            </TableCell>
+                                            <TableCell align="right"
+                                                       className={row.notPrecisedEndDate ? styles.greyFont : ''}>
+                                                {row.endDate ? dayjs(row.endDate).format('DD/MM/YYYY') : ''}
+                                            </TableCell>
                                             <TableCell align="right">{row.language}</TableCell>
                                             <TableCell align="right">{row.countries.join(', ')}</TableCell>
                                             <TableCell align="right" onClick={e => handleRemove(row._id)}><DeleteIcon

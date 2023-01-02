@@ -6,8 +6,8 @@ export const getAll = async () => {
         return new Error('Internal Server Error');
     }
 
-    console.log('Utils getAll', res.data);
     const data = await res.data?.books;
+    console.log('Response data for Get All', data);
     return data;
 };
 
@@ -17,8 +17,8 @@ export const getById = async (id) => {
         return new Error('Internal Server Error');
     }
 
-    console.log(res.data);
     const data = await res.data?.book;
+    console.log('Response data for Get by Id', data);
     return data;
 };
 
@@ -29,20 +29,19 @@ export const create = async (data) => {
         return new Error('Internal Server Error');
     }
 
-    console.log(res.data);
     const responseData = await res.data?.book;
+    console.log('Response data for Create', responseData);
     return responseData;
 };
 
 export const update = async (data) => {
     const res = await axios.put(`${process.env.NEXT_PUBLIC_HOST}/api/books/${data._id}`, data);
-    console.log(res);
     if (res.status !== 200) {
         return new Error('Internal Server Error');
     }
 
-    console.log(res.data);
     const responseData = await res.data?.book;
+    console.log('Response data for Update', responseData);
     return responseData;
 };
 
@@ -52,7 +51,7 @@ export const remove = async (id) => {
         return new Error('Internal Server Error');
     }
 
-    console.log(res.data);
     const responseData = await res.data?.book;
+    console.log('Response data for Remove', responseData);
     return responseData;
 };

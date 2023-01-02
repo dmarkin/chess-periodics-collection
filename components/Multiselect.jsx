@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import {Box, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
@@ -28,7 +28,7 @@ const MultiSelect = ({list, value, required, name, id, label, labelId, onChange}
 
     const handleChange = (event) => {
         const {
-            target: { value },
+            target: {value},
         } = event;
         setPersonName(
             // On autofill we get a stringified value.
@@ -49,11 +49,11 @@ const MultiSelect = ({list, value, required, name, id, label, labelId, onChange}
                     multiple
                     value={value}
                     onChange={handleChange}
-                    input={<OutlinedInput id={`input-${name}-${id}`} label={label} />}
+                    input={<OutlinedInput id={`input-${name}-${id}`} label={label}/>}
                     renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                             {selected.map((value) => (
-                                <Chip key={value} label={value} />
+                                <Chip key={value} label={value}/>
                             ))}
                         </Box>
                     )}

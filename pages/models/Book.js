@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const bookSchema = new Schema({
     type: {
-        type: String, //'regular' | 'special'
+        type: String,
         required: true
     },
     title: {
