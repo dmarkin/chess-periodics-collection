@@ -2,6 +2,8 @@ The project allows to make CRUD operations with Periodics & Books chess library.
 The next planned features: authorization, pagination, filtering.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+![Alt text](./assets/screenshot.png?raw=true "Main table")
+
 ## Getting Started
 
 First, run the development server:
