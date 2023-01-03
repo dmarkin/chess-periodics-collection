@@ -14,10 +14,12 @@ import {
     TableRow,
     TableSortLabel
 } from '@mui/material';
+import ConfirmationDialog from "./ConfirmationDialog";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {visuallyHidden} from '@mui/utils';
 import Link from 'next/link';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router'
 import {remove as removeBook} from '../pages/requests/utils';
 import styles from '../styles/BookTable.module.css';
 
@@ -46,13 +48,13 @@ const headCells = [
     },
     {
         id: 'title',
-        numeric: true,
+        numeric: false,
         disablePadding: true,
         label: 'Title',
     },
     {
         id: 'author',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Author',
     },
@@ -70,13 +72,13 @@ const headCells = [
     },
     {
         id: 'language',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Language',
     },
     {
         id: 'countries',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Countries',
     },
@@ -130,12 +132,15 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const EnhancedTable = ({rows = []}) => {
+const EnhancedTable = ({rows}) => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
+    const [isConfirmationOpened, setIsConfirmationOpened] = React.useState(false);
     const [isNotificationOpened, setIsNotificationOpened] = React.useState(false);
+    const [rowToRemove, setRowToRemove] = React.useState(null);
+    const router = useRouter();
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -152,11 +157,28 @@ const EnhancedTable = ({rows = []}) => {
         setPage(0);
     };
 
-    const handleRemove = (id) => {
-        removeBook(id)
+    const handleRemoveInitiation = (row) => {
+        setIsConfirmationOpened(true);
+        setRowToRemove(row);
+    };
+
+    const handleRemove = (row) => {
+        setRowToRemove(null);
+        setIsConfirmationOpened(false);
+
+        removeBook(row._id)
             .then((data) => console.log(data))
-            .then(() => setIsNotificationOpened(true))
+            .then(() => {
+                setIsNotificationOpened(true);
+                setIsConfirmationOpened(false);
+                router.reload(window.location.pathname);
+            })
             .catch((error => console.log(error)));
+    };
+
+    const handleRemoveCancelled = () => {
+        setIsConfirmationOpened(false);
+        setRowToRemove(null);
     };
 
     const handleCloseNotification = () => {
@@ -196,14 +218,17 @@ const EnhancedTable = ({rows = []}) => {
                                         >
                                             <TableCell align="left">{index + 1}</TableCell>
                                             <TableCell
-                                                align="right"
+                                                align="left"
                                                 component="th"
                                                 scope="row"
                                                 padding="none"
                                             >
                                                 <Link href={`/books/${row._id}`}>{row.title}</Link>
                                             </TableCell>
-                                            <TableCell align="right">{row.author}</TableCell>
+                                            <TableCell align="left"
+                                                       className={row.author === 'Unknown' ? styles.greyFont : ''}>
+                                                {row.author}
+                                            </TableCell>
                                             <TableCell align="right"
                                                        className={row.notPrecisedStartDate ? styles.greyFont : ''}>
                                                 {row.startDate ? dayjs(row.startDate).format('DD/MM/YYYY') : ''}
@@ -212,10 +237,11 @@ const EnhancedTable = ({rows = []}) => {
                                                        className={row.notPrecisedEndDate ? styles.greyFont : ''}>
                                                 {row.endDate ? dayjs(row.endDate).format('DD/MM/YYYY') : ''}
                                             </TableCell>
-                                            <TableCell align="right">{row.language}</TableCell>
-                                            <TableCell align="right">{row.countries.join(', ')}</TableCell>
-                                            <TableCell align="right" onClick={e => handleRemove(row._id)}><DeleteIcon
-                                                color="primary"/></TableCell>
+                                            <TableCell align="left">{row.language}</TableCell>
+                                            <TableCell align="left">{row.countries.join(', ')}</TableCell>
+                                            <TableCell align="right" onClick={() => handleRemoveInitiation(row)}>
+                                                <DeleteIcon color="primary"/>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -241,6 +267,12 @@ const EnhancedTable = ({rows = []}) => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <ConfirmationDialog
+                isOpen={isConfirmationOpened}
+                item={rowToRemove}
+                confirmAction={handleRemove}
+                cancelAction={handleRemoveCancelled}
+        />
             <Snackbar open={isNotificationOpened} autoHideDuration={5000} onClose={handleCloseNotification}>
                 <Alert onClose={handleCloseNotification} severity="success" sx={{width: '100%'}}>
                     Book removed!
@@ -248,6 +280,10 @@ const EnhancedTable = ({rows = []}) => {
             </Snackbar>
         </Box>
     );
+};
+
+EnhancedTable.defaultProps = {
+    rows: [],
 };
 
 export default EnhancedTable;
